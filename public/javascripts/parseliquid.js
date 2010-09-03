@@ -68,8 +68,13 @@ var LiquidParser = Editor.Parser = (function() {
         }
         if (source.equals("%")) {
           source.next();
-          setState(inLiquidTagName);
-          return 'liquid-start-punctuation';
+          if (source.lookAhead('comment', true, true, false)) {
+            setState(inBlock("liquid-comment", "{% endcomment %}"));
+            return null;
+          } else {
+            setState(inLiquidTagName);
+            return 'liquid-start-punctuation';
+          }
         }
         else {
           return "xml-text";
@@ -283,7 +288,7 @@ var LiquidParser = Editor.Parser = (function() {
     function base() {
       return pass(element, base);
     }
-    var harmlessTokens = {"xml-text": true, "xml-entity": true, "xml-comment": true, "xml-processing": true};
+    var harmlessTokens = {"xml-text": true, "xml-entity": true, "xml-comment": true, "xml-processing": true, "liquid-comment": true};
     var liquidTokens = {"liquid-punctuation": true, "liquid-bad-punctuation": true, "liquid-keyword": true, "liquid-tag-name": true, "liquid-variable": true, "liquid-text": true, "liquid-string": true};
     var liquidDelimiterTokens = {"liquid-start-punctuation": true, "liquid-end-punctuation": true};
     function element(style, content) {
@@ -372,7 +377,7 @@ var LiquidParser = Editor.Parser = (function() {
           token.indentation = computeIndentation(context);
         }
 
-        if (token.style == "whitespace" || token.type == "xml-comment")
+        if (token.style == "whitespace" || token.type == "xml-comment" || token.type == "liquid-comment")
           return token;
 
         while(true){

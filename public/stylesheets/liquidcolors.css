@@ -1,6 +1,11 @@
+span.liquid-punctuation, span.liquid-start-punctuation, span.liquid-end-punctuation, span.liquid-bad-punctuation,
+  span.liquid-text, span.liquid-variable, span.liquid-string, span.liquid-tag-name, span.liquid-keyword,
+  span.liquid-tag-name {
+  background-color: #EEE;
+}
 
 span.liquid-punctuation, span.liquid-start-punctuation, span.liquid-end-punctuation {
-  color: silver;
+  color: gray;
 }
 
 span.liquid-bad-punctuation {
@@ -33,4 +38,7 @@ span.liquid-keyword {
 span.liquid-tag-name {
   color: black;
   font-weight: bold;
+}
+span.liquid-comment {
+  color:gray;
 }
